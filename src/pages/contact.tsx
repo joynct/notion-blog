@@ -35,7 +35,7 @@ const contacts = [
 export default function Contact() {
   return (
     <>
-      <Header titlePre="Contact" />
+      <Header titlePre="Contato" />
       <div className={sharedStyles.layout}>
         <div className={contactStyles.avatar}>
           <img src="/avatar.png" alt="avatar with letters JJ" height={60} />
@@ -44,7 +44,7 @@ export default function Contact() {
         <h1 style={{ marginTop: 0 }}>Contact</h1>
 
         <div className={contactStyles.name}>
-          Joyce Aniceto @ <ExtLink href="criajoy.netlify.app">Vercel</ExtLink>
+          Joyce Aniceto @ <ExtLink href="criajoy.netlify.app">Cria.Joy</ExtLink>
         </div>
 
         <div className={contactStyles.links}>
