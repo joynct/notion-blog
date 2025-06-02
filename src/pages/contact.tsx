@@ -28,7 +28,7 @@ const contacts = [
   {
     Comp: Envelope,
     alt: 'envelope icon',
-    link: 'mailto:jj@jjsweb.site?subject=Notion Blog',
+    link: 'mailto:joyceaniceto@gmail.com',
   },
 ]
 
@@ -44,8 +44,7 @@ export default function Contact() {
         <h1 style={{ marginTop: 0 }}>Contact</h1>
 
         <div className={contactStyles.name}>
-          JJ Kasper - Next.js Engineer @{' '}
-          <ExtLink href="https://vercel.com">Vercel</ExtLink>
+          Joyce Aniceto @ <ExtLink href="criajoy.netlify.app">Vercel</ExtLink>
         </div>
 
         <div className={contactStyles.links}>
