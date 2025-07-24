@@ -14,7 +14,10 @@ export default function Footer() {
           />
         </ExtLink>
         <span>
-          or <ExtLink href="https://criajoy.netlify.app/">view source</ExtLink>
+          <ExtLink href="https://criajoy.netlify.app/">
+            {' '}
+            2025 cria.joy. Todos os direitos reservados.
+          </ExtLink>
         </span>
       </footer>
     </>
