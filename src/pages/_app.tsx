@@ -7,8 +7,8 @@ import { useEffect } from 'react'
 
 const GA_MEASUREMENT_ID = 'G-RRPGN34V24'
 
-function sendPageview(url) {
-  window.gtag('config', GA_MEASUREMENT_ID, {
+function sendPageview(url: string) {
+  ;(window as any).gtag('config', GA_MEASUREMENT_ID, {
     page_path: url,
   })
 }
