@@ -7,21 +7,19 @@ import { useEffect } from 'react'
 
 const GA_MEASUREMENT_ID = 'G-RRPGN34V24'
 
-function sendPageview(url: string) {
-  // @ts-ignore
+function sendPageview(url) {
   if (typeof window !== 'undefined' && window.gtag) {
-    // @ts-ignore
     window.gtag('config', GA_MEASUREMENT_ID, {
       page_path: url,
     })
   }
 }
 
-export default function MyApp({ Component, pageProps }: any) {
+export default function MyApp({ Component, pageProps }) {
   const router = useRouter()
 
   useEffect(() => {
-    const handleRouteChange = (url: string) => {
+    const handleRouteChange = (url) => {
       sendPageview(url)
     }
     router.events.on('routeChangeComplete', handleRouteChange)
