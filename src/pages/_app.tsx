@@ -5,6 +5,13 @@ import Script from 'next/script'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void
+    dataLayer: any[]
+  }
+}
+
 const GA_MEASUREMENT_ID = 'G-RRPGN34V24'
 
 function sendPageview(url: string) {
