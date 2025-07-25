@@ -8,9 +8,11 @@ import { useEffect } from 'react'
 const GA_MEASUREMENT_ID = 'G-RRPGN34V24'
 
 function sendPageview(url: string) {
-  ;(window as any).gtag('config', GA_MEASUREMENT_ID, {
-    page_path: url,
-  })
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    ;(window as any).gtag('config', GA_MEASUREMENT_ID, {
+      page_path: url,
+    })
+  }
 }
 
 export default function MyApp({ Component, pageProps }) {
@@ -32,16 +34,18 @@ export default function MyApp({ Component, pageProps }) {
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
       />
-      <Script id="gtag-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${GA_MEASUREMENT_ID}', {
-            page_path: window.location.pathname,
-          });
-        `}
-      </Script>
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `,
+        }}
+      />
       <Component {...pageProps} />
       <Footer />
     </>
