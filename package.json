@@ -10,7 +10,7 @@
   },
   "pre-commit": "lint-staged",
   "dependencies": {
-    "react-jsx-parser": "^2.4.0",
+    "@zeit/react-jsx-parser": "2.0.0",
     "async-sema": "3.1.0",
     "caniuse-lite": "^1.0.30001720",
     "github-slugger": "1.2.1",
