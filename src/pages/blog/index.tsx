@@ -63,6 +63,12 @@ const Index = ({ posts = [], preview }) => {
         </div>
       )}
       <div className={`${sharedStyles.layout} ${blogStyles.blogIndex}`}>
+        <img
+          src="/clog criativo icone.png"
+          height="85"
+          width="250"
+          alt="Clog Criativo ícone"
+        />
         <h1>Clog Criativo</h1>
         {posts.length === 0 && (
           <p className={blogStyles.noPosts}>There are no posts yet</p>
@@ -81,10 +87,12 @@ const Index = ({ posts = [], preview }) => {
                 </span>
               </h3>
               {post.Authors.length > 0 && (
-                <div className="authors">By: {post.Authors.join(' ')}</div>
+                <div className="authors">Por: {post.Authors.join(' ')}</div>
               )}
               {post.Date && (
-                <div className="posted">Posted: {getDateStr(post.Date)}</div>
+                <div className="posted">
+                  Publicado em: {getDateStr(post.Date)}
+                </div>
               )}
               <p>
                 {(!post.preview || post.preview.length === 0) &&
