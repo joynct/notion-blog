@@ -38,7 +38,7 @@ export default function Contact() {
         <h1 style={{ marginTop: 0 }}>Contato</h1>
 
         <div className={contactStyles.name}>
-          Joyce Aniceto @ <ExtLink href="criajoy.netlify.app">Cria.Joy</ExtLink>
+          Joyce Aniceto @<ExtLink href="criajoy.netlify.app">Cria.Joy</ExtLink>
         </div>
 
         <div className={contactStyles.links}>

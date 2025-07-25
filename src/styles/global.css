@@ -109,7 +109,7 @@ code[class*='language-css'] {
 }
 .token.selector,
 .language-autohotkey .token.keyword {
-  color: #00009f;
+  color: #e23466;
 }
 .token.important,
 .token.bold {
@@ -144,7 +144,7 @@ code[class*='language-css'] {
   font-weight: bolder;
 }
 .token.selector {
-  color: #2b91af;
+  color: #e23466;
 }
 .token.property,
 .token.entity {
@@ -252,11 +252,11 @@ figure {
 }
 
 a {
-  color: #0070f3;
+  color: #e23466;
   text-decoration: none;
 }
 a:hover {
-  color: #3291ff;
+  color: #aa1f47;
 }
 
 .links {

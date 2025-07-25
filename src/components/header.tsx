@@ -8,7 +8,11 @@ const navItems: { label: string; page?: string; link?: string }[] = [
   { label: 'Home', page: '/' },
   { label: 'Blog', page: '/blog' },
   { label: 'Contato', page: '/contato' },
-  { label: 'CriaJoy', link: 'https://criajoy.netlify.app/' },
+  {
+    label: 'CriaJoy',
+    link:
+      'https://criajoy.netlify.app/?utm_source=clogblog&utm_medium=menu&utm_campaign=blog',
+  },
 ]
 
 const ogImageUrl = 'https://notion-blog.now.sh/og-image.png'
