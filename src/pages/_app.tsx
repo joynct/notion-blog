@@ -8,18 +8,20 @@ import { useEffect } from 'react'
 const GA_MEASUREMENT_ID = 'G-RRPGN34V24'
 
 function sendPageview(url: string) {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    ;(window as any).gtag('config', GA_MEASUREMENT_ID, {
+  // @ts-ignore
+  if (typeof window !== 'undefined' && window.gtag) {
+    // @ts-ignore
+    window.gtag('config', GA_MEASUREMENT_ID, {
       page_path: url,
     })
   }
 }
 
-export default function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }: any) {
   const router = useRouter()
 
   useEffect(() => {
-    const handleRouteChange = (url) => {
+    const handleRouteChange = (url: string) => {
       sendPageview(url)
     }
     router.events.on('routeChangeComplete', handleRouteChange)
