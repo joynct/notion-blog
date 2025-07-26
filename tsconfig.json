@@ -22,6 +22,7 @@
     "**/*.ts",
     "**/*.tsx",
     "types/**/*.d.ts",
-    "scripts/create-table.js"
+    "scripts/create-table.js",
+    "src/pages/_app.js"
   ]
 }
