@@ -28,7 +28,7 @@ export async function getStaticProps({ params: { slug }, preview }) {
         redirect: '/blog',
         preview: false,
       },
-      unstable_revalidate: 5,
+      revalidate: 60,
     }
   }
   const postData = await getPageData(post.id)
@@ -56,8 +56,13 @@ export async function getStaticProps({ params: { slug }, preview }) {
     }
   }
 
-  const { users } = await getNotionUsers(post.Authors || [])
-  post.Authors = Object.keys(users).map((id) => users[id].full_name)
+  // Autor na publicação em si
+  const authorNames = {
+    'b95499c4-31c9-4209-9bd8-644868be31fa': 'Joy',
+    // Adicione outros autores se necessário
+  }
+
+  post.Authors = post.Authors.map((id) => authorNames[id] || 'Autor')
 
   return {
     props: {
