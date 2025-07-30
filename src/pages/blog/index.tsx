@@ -4,6 +4,8 @@ import Header from '../../components/header'
 import blogStyles from '../../styles/blog.module.css'
 import sharedStyles from '../../styles/shared.module.css'
 
+import SearchBar from '../../components/SearchBar'
+
 import {
   getBlogLink,
   getDateStr,
@@ -70,6 +72,9 @@ const Index = ({ posts = [], preview }) => {
           alt="Clog Criativo ícone"
         />
         <h1>Clog Criativo</h1>
+
+        <SearchBar posts={posts} />
+
         {posts.length === 0 && (
           <p className={blogStyles.noPosts}>There are no posts yet</p>
         )}
