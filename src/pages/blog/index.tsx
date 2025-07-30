@@ -33,7 +33,7 @@ export async function getStaticProps({ preview }) {
       return post
     })
     .filter(Boolean)
-
+    .sort((a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime())
   const { users } = await getNotionUsers([...authorsToGet])
 
   posts.map((post) => {
