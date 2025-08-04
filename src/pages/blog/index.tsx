@@ -15,6 +15,12 @@ import { textBlock } from '../../lib/notion/renderers'
 import getNotionUsers from '../../lib/notion/getNotionUsers'
 import getBlogIndex from '../../lib/notion/getBlogIndex'
 
+// Autor na prévia do post
+const authorNames = {
+  'b95499c4-31c9-4209-9bd8-644868be31fa': 'Joy',
+  // Adicione outros autores se necessário
+}
+
 export async function getStaticProps({ preview }) {
   const postsTable = await getBlogIndex()
 
@@ -34,10 +40,17 @@ export async function getStaticProps({ preview }) {
     })
     .filter(Boolean)
     .sort((a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime())
-  const { users } = await getNotionUsers([...authorsToGet])
+
+  // A linha abaixo busca os nomes do Notion, mas você quer usar o objeto 'authorNames'
+  // const { users } = await getNotionUsers([...authorsToGet])
 
   posts.map((post) => {
-    post.Authors = post.Authors.map((id) => users[id].full_name)
+    // A linha abaixo usa os nomes do Notion. Vamos substituí-la.
+    // post.Authors = post.Authors.map((id) => users[id].full_name)
+
+    // Nova lógica: Mapeia o ID do autor para o nome definido em 'authorNames'.
+    // Se o ID não for encontrado, ele mantém o ID do Notion como fallback.
+    post.Authors = post.Authors.map((id) => authorNames[id] || id)
   })
 
   return {
