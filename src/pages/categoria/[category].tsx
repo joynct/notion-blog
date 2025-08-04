@@ -27,10 +27,9 @@ export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
 
   const filteredPosts = allPosts
     .filter((post) => {
-      // Transforma o array de objetos em um array de strings para fazer a verificação
-      const categoryNames = post.Category?.map((cat) => cat.name)
+      // Como as categorias já são strings (processadas no getBlogIndex), use diretamente
       return (
-        categoryNames?.includes(category) && (!preview || postIsPublished(post))
+        post.Category?.includes(category) && (!preview || postIsPublished(post))
       )
     })
     .sort((a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime())
@@ -58,7 +57,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const post = postsTable[slug]
     if (postIsPublished(post) && post.Category) {
       if (Array.isArray(post.Category)) {
-        post.Category.forEach((cat) => categories.add(cat.name))
+        post.Category.forEach((cat) => categories.add(cat))
       } else {
         categories.add(post.Category as string)
       }
