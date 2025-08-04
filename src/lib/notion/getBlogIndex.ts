@@ -34,6 +34,39 @@ export default async function getBlogIndex(previews = true) {
       )
 
       postsTable = await getTableData(tableBlock, true)
+
+      // Processar categorias para cada post
+      for (const slug in postsTable) {
+        if (postsTable.hasOwnProperty(slug)) {
+          const post = postsTable[slug]
+          let categories: string[] = []
+
+          if (post.Category) {
+            // Caso 1: Array de objetos com propriedade 'name' (formato padrão da API do Notion)
+            if (Array.isArray(post.Category)) {
+              categories = post.Category.map((item) => {
+                if (typeof item === 'object' && item.name) {
+                  return item.name
+                } else if (typeof item === 'string') {
+                  return item
+                }
+                return null
+              }).filter(Boolean)
+            }
+            // Caso 2: String única (pode estar separada por vírgula)
+            else if (typeof post.Category === 'string') {
+              categories = post.Category.split(',')
+                .map((item) => item.trim())
+                .filter(Boolean)
+            }
+            // Caso 3: Objeto único com propriedade name
+            else if (typeof post.Category === 'object' && post.Category.name) {
+              categories = [post.Category.name]
+            }
+          }
+          postsTable[slug].Category = categories
+        }
+      }
     } catch (err) {
       console.warn(
         `Failed to load Notion posts, have you run the create-table script?`
