@@ -249,3 +249,14 @@
   width: 100%;
   height: 100%;
 }
+
+.category {
+  background-color: #e0e0e0; /*  cinza clara */
+  color: #333; /* Cor do texto */
+  padding: 4px 8px; /* Espaçamento interno */
+  border-radius: 4px; /* Cantos arredondados */
+  font-size: 14px; /* Tamanho da fonte */
+  font-weight: bold; /* Deixa o texto em negrito */
+  display: inline-block; /* Para que o fundo se ajuste ao tamanho do texto */
+  margin-top: 8px; /* Espaço acima do texto */
+}
