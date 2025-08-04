@@ -13,6 +13,21 @@ import getBlogIndex from '../../lib/notion/getBlogIndex'
 import getNotionUsers from '../../lib/notion/getNotionUsers'
 import { getBlogLink, getDateStr } from '../../lib/blog-helpers'
 
+// Código do AddToAny para carregamento do script
+declare global {
+  interface Window {
+    a2a_config: any
+  }
+}
+
+// Adicione esta função para carregar o script quando o componente é montado
+const loadAddToAny = () => {
+  const script = document.createElement('script')
+  script.async = true
+  script.src = 'https://static.addtoany.com/menu/page.js'
+  document.body.appendChild(script)
+}
+
 // Get the data for each blog post
 export async function getStaticProps({ params: { slug }, preview }) {
   // load the postsTable so that we can get the page's ID
@@ -103,9 +118,7 @@ const RenderPost = ({ post, redirect, preview }) => {
   } = {}
 
   useEffect(() => {
-    const twitterSrc = 'https://platform.twitter.com/widgets.js'
-    // make sure to initialize any new widgets loading on
-    // client navigation
+    const twitterSrc = 'https://platform.twitter.com/widgets.js' // make sure to initialize any new widgets loading on // client navigation
     if (post && post.hasTweet) {
       if ((window as any)?.twttr?.widgets) {
         ;(window as any).twttr.widgets.load()
@@ -116,7 +129,16 @@ const RenderPost = ({ post, redirect, preview }) => {
         document.querySelector('body').appendChild(script)
       }
     }
-  }, [])
+    // Adicione a lógica para carregar o AddToAny
+    if (typeof window !== 'undefined' && post) {
+      window.a2a_config = window.a2a_config || {}
+      window.a2a_config.locale = 'pt-BR'
+      window.a2a_config.url = window.location.href
+      window.a2a_config.title = post.Page
+      loadAddToAny()
+    }
+  }, [post])
+
   useEffect(() => {
     if (redirect && !post) {
       router.replace(redirect)
@@ -135,7 +157,7 @@ const RenderPost = ({ post, redirect, preview }) => {
     return (
       <div className={blogStyles.post}>
         <p>
-          Woops! didn't find that post, redirecting you back to the blog index
+          Ops! Não encontrei esse conteúdo, redirecionando você para a home.
         </p>
       </div>
     )
@@ -165,6 +187,21 @@ const RenderPost = ({ post, redirect, preview }) => {
         )}
 
         <hr />
+
+        {/* Botões de compartilhamento do AddToAny */}
+        <div
+          className="a2a_kit a2a_kit_size_32 a2a_default_style"
+          data-a2a-title={post.Page}
+        >
+          <a className="a2a_dd" href="https://www.addtoany.com/share"></a>
+          <a className="a2a_button_whatsapp"></a>
+          <a className="a2a_button_linkedin"></a>
+          <a className="a2a_button_pinterest"></a>
+          <a className="a2a_button_bluesky"></a>
+          <a className="a2a_button_copy_link"></a>
+          <a className="a2a_button_twitter"></a>
+        </div>
+        <br />
 
         {(!post.content || post.content.length === 0) && (
           <p>This post has no content</p>
