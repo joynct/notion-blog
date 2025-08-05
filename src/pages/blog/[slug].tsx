@@ -117,6 +117,19 @@ const RenderPost = ({ post, redirect, preview }) => {
     }
   } = {}
 
+  // Lógica para carregar o script do AddToAny apenas uma vez, quando o componente é montado
+  useEffect(() => {
+    if (
+      typeof window !== 'undefined' &&
+      !document.querySelector(
+        'script[src="https://static.addtoany.com/menu/page.js"]'
+      )
+    ) {
+      loadAddToAny()
+    }
+  }, []) // O array vazio [] garante que esta função só execute na montagem do componente
+
+  // Lógica para configurar o AddToAny quando os dados do post estiverem disponíveis
   useEffect(() => {
     const twitterSrc = 'https://platform.twitter.com/widgets.js' // make sure to initialize any new widgets loading on // client navigation
     if (post && post.hasTweet) {
@@ -129,13 +142,12 @@ const RenderPost = ({ post, redirect, preview }) => {
         document.querySelector('body').appendChild(script)
       }
     }
-    // Adicione a lógica para carregar o AddToAny
+    // Adicione a lógica para configurar o AddToAny
     if (typeof window !== 'undefined' && post) {
       window.a2a_config = window.a2a_config || {}
       window.a2a_config.locale = 'pt-BR'
       window.a2a_config.url = window.location.href
       window.a2a_config.title = post.Page
-      loadAddToAny()
     }
   }, [post])
 
@@ -152,7 +164,7 @@ const RenderPost = ({ post, redirect, preview }) => {
   }
 
   // if you don't have a post at this point, and are not
-  // loading one from fallback then  redirect back to the index
+  // loading one from fallback then  redirect back to the index
   if (!post) {
     return (
       <div className={blogStyles.post}>

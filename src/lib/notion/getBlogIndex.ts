@@ -8,6 +8,7 @@ import { BLOG_INDEX_ID, BLOG_INDEX_CACHE } from './server-constants'
 export default async function getBlogIndex(previews = true) {
   let postsTable: any = null
   const useCache = process.env.USE_CACHE === 'true'
+
   const cacheFile = `${BLOG_INDEX_CACHE}${previews ? '_previews' : ''}`
 
   if (useCache) {
@@ -71,19 +72,6 @@ export default async function getBlogIndex(previews = true) {
       console.warn(
         `Failed to load Notion posts, have you run the create-table script?`
       )
-
-      console.log('=== DEBUG POSTS ===')
-      Object.keys(postsTable).forEach((slug) => {
-        const post = postsTable[slug]
-        console.log(`Slug: ${slug}`)
-        console.log(`Page: ${post.Page}`)
-        console.log(`Published: ${post.Published}`)
-        console.log(`Category (tipo):`, typeof post.Category)
-        console.log(`Category (valor):`, post.Category)
-        console.log(`ID: ${post.id}`)
-        console.log('---')
-      })
-      console.log('=== FIM DEBUG ===')
 
       return {}
     }
