@@ -30,3 +30,7 @@ export const normalizeSlug = (slug) => {
   }
   return startingSlash || endingSlash ? normalizeSlug(slug) : slug
 }
+
+export const getCategoryLink = (category: string) => {
+  return `/categoria/${encodeURIComponent(category)}`
+}
