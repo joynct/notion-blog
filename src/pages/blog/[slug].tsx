@@ -43,7 +43,7 @@ export async function getStaticProps({ params: { slug }, preview }) {
         redirect: '/blog',
         preview: false,
       },
-      revalidate: 60,
+      revalidate: 200,
     }
   }
   const postData = await getPageData(post.id)

@@ -45,7 +45,7 @@ export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
       posts: filteredPosts,
       category,
     },
-    revalidate: 10,
+    revalidate: 60,
   }
 }
 
