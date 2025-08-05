@@ -71,6 +71,20 @@ export default async function getBlogIndex(previews = true) {
       console.warn(
         `Failed to load Notion posts, have you run the create-table script?`
       )
+
+      console.log('=== DEBUG POSTS ===')
+      Object.keys(postsTable).forEach((slug) => {
+        const post = postsTable[slug]
+        console.log(`Slug: ${slug}`)
+        console.log(`Page: ${post.Page}`)
+        console.log(`Published: ${post.Published}`)
+        console.log(`Category (tipo):`, typeof post.Category)
+        console.log(`Category (valor):`, post.Category)
+        console.log(`ID: ${post.id}`)
+        console.log('---')
+      })
+      console.log('=== FIM DEBUG ===')
+
       return {}
     }
 
