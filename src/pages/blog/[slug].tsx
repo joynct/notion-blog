@@ -17,6 +17,9 @@ import { getBlogLink, getDateStr } from '../../lib/blog-helpers'
 declare global {
   interface Window {
     a2a_config: any
+    a2a: {
+      init: (page: string) => void
+    }
   }
 }
 
@@ -148,6 +151,9 @@ const RenderPost = ({ post, redirect, preview }) => {
       window.a2a_config.locale = 'pt-BR'
       window.a2a_config.url = window.location.href
       window.a2a_config.title = post.Page
+      if (window.a2a) {
+        window.a2a.init('page')
+      }
     }
   }, [post])
 
