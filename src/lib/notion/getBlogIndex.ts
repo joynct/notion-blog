@@ -8,19 +8,49 @@ import { BLOG_INDEX_ID, BLOG_INDEX_CACHE } from './server-constants'
 export default async function getBlogIndex(previews = true) {
   let postsTable: any = null
   const useCache = process.env.USE_CACHE === 'true'
-
   const cacheFile = `${BLOG_INDEX_CACHE}${previews ? '_previews' : ''}`
 
+  // === CACHE INTELIGENTE (SUBSTITUI A PARTIR DESTA LINHA) ===
   if (useCache) {
     try {
-      postsTable = JSON.parse(await readFile(cacheFile, 'utf8'))
-    } catch (_) {
-      /* not fatal */
+      const cacheData = await readFile(cacheFile, 'utf8')
+      const parsedCache = JSON.parse(cacheData)
+
+      // Validação básica do cache
+      if (
+        parsedCache &&
+        typeof parsedCache === 'object' &&
+        Object.keys(parsedCache).length > 0
+      ) {
+        // Verifica se os posts têm estrutura válida
+        const firstPost = Object.values(parsedCache)[0] as any
+        if (firstPost && firstPost.Page && firstPost.Slug) {
+          postsTable = parsedCache
+          console.log(
+            `✅ Cache válido carregado com ${
+              Object.keys(postsTable).length
+            } posts`
+          )
+        } else {
+          console.log(
+            '⚠️ Cache com estrutura inválida, buscando dados frescos...'
+          )
+        }
+      } else {
+        console.log('⚠️ Cache vazio, buscando dados frescos...')
+      }
+    } catch (error) {
+      console.log(
+        '⚠️ Erro ao ler cache, buscando dados frescos:',
+        error.message
+      )
     }
   }
 
   if (!postsTable) {
     try {
+      console.log('🔍 Buscando dados do Notion...')
+
       const data = await rpc('loadPageChunk', {
         pageId: BLOG_INDEX_ID,
         limit: 100, // TODO: figure out Notion's way of handling pagination
@@ -34,7 +64,16 @@ export default async function getBlogIndex(previews = true) {
         (block: any) => block.value.type === 'collection_view'
       )
 
+      if (!tableBlock) {
+        throw new Error(
+          'TableBlock não encontrado - verificar se a página é uma database'
+        )
+      }
+
       postsTable = await getTableData(tableBlock, true)
+      console.log(
+        `✅ ${Object.keys(postsTable).length} posts carregados do Notion`
+      )
 
       // Processar categorias para cada post
       for (const slug in postsTable) {
@@ -68,16 +107,26 @@ export default async function getBlogIndex(previews = true) {
           postsTable[slug].Category = categories
         }
       }
-    } catch (err) {
-      console.warn(
-        `Failed to load Notion posts, have you run the create-table script?`
-      )
 
+      // === SALVA CACHE APENAS SE DADOS SÃO VÁLIDOS ===
+      if (useCache && postsTable && Object.keys(postsTable).length > 0) {
+        try {
+          await writeFile(cacheFile, JSON.stringify(postsTable), 'utf8')
+          console.log('💾 Cache salvo com sucesso')
+        } catch (cacheError) {
+          console.warn('⚠️ Erro ao salvar cache:', cacheError.message)
+        }
+      }
+    } catch (err) {
+      console.error('❌ Erro ao buscar do Notion:', err.message)
+      console.warn(
+        'Failed to load Notion posts, have you run the create-table script?'
+      )
       return {}
     }
 
-    // only get 10 most recent post's previews
-    const postsKeys = Object.keys(postsTable).splice(0, 10)
+    // só os 5 posts mais recentes na preview
+    const postsKeys = Object.keys(postsTable).splice(0, 5)
 
     const sema = new Sema(1, { capacity: postsKeys.length })
 
@@ -113,10 +162,6 @@ export default async function getBlogIndex(previews = true) {
             sema.release()
           })
       )
-    }
-
-    if (useCache) {
-      writeFile(cacheFile, JSON.stringify(postsTable), 'utf8').catch(() => {})
     }
   }
 
