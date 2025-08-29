@@ -15,13 +15,13 @@ function generateSitemap(posts) {
   let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://clogcriativo.com.br/</loc>
+    <loc>https://clogcriativo.vercel.app/</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://clogcriativo.com.br/blog</loc>
+    <loc>https://clogcriativo.vercel.app/</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -32,7 +32,7 @@ function generateSitemap(posts) {
   Object.values(posts).forEach((post: any) => {
     // Apenas posts publicados devem ir para o sitemap
     if (post.Published === 'Yes') {
-      const postUrl = `https://clogcriativo.com.br${getBlogLink(post.Slug)}`
+      const postUrl = `https://clogcriativo.vercel.app${getBlogLink(post.Slug)}`
       sitemap += `  <url>
     <loc>${postUrl}</loc>
     <lastmod>${new Date(post.Date).toISOString()}</lastmod>
@@ -45,7 +45,7 @@ function generateSitemap(posts) {
 
   // URLs das categorias
   allCategories.forEach((category: string) => {
-    const categoryUrl = `https://clogcriativo.com.br${getCategoryLink(
+    const categoryUrl = `https://clogcriativo.vercel.app${getCategoryLink(
       category
     )}`
     sitemap += `  <url>
@@ -67,11 +67,22 @@ export async function getServerSideProps({ res }) {
     const postsTable = await getBlogIndex()
     const sitemap = generateSitemap(postsTable)
 
-    res.setHeader('Content-Type', 'application/xml')
+    // Headers corrigidos para o Google Search Console
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8')
+    res.setHeader(
+      'Cache-Control',
+      'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
+    )
+    res.setHeader('X-Robots-Tag', 'noindex') // Evita indexação do próprio sitemap
+
+    // Define status code explicitamente
+    res.statusCode = 200
+
     res.write(sitemap)
     res.end()
   } catch (error) {
     console.error('Failed to generate sitemap:', error)
+    res.setHeader('Content-Type', 'text/plain')
     res.statusCode = 500
     res.end('Error generating sitemap')
   }
