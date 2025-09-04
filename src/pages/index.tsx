@@ -15,15 +15,23 @@ export default function Index() {
           <p>
             {' '}
             Aqui, você encontra ideias, reflexões e soluções que unem
-            criatividade e resultado. Um espaço para quem quer vender no digital
-            com mais clareza, consistência e personalidade.
+            criatividade e resultado. Para quem quer vender no digital com mais
+            clareza, consistência e personalidade, sem se perder no caos das
+            redes sociais.
           </p>
           <div style={{ height: '20px' }}></div>
           <p>
-            Esse espaço nasceu para compartilhar o que aprendo e aplico
-            diariamente com marcas reais: estratégias que funcionam, design que
-            vende e marketing que respeita o tempo (e o bolso) de quem está do
-            outro lado.
+            É para ler com calma! Num mundo dominado pela instantaneidade, aqui
+            é um espaço contra a maré. Nada de vídeos chamativos, anúncios
+            piscando ou click baits desnessários. Esse espaço nasceu para que eu
+            possa compartilhar o que aprendo e aplico diariamente com marcas
+            reais: estratégias que funcionam, design que vende e marketing que
+            respeita o tempo (e o bolso) de quem está do outro lado.
+          </p>
+          <p>
+            {' '}
+            Se você gostou, me siga nas minhas redes sociais e deixe seu
+            feedback.{' '}
           </p>
         </div>
       </div>
