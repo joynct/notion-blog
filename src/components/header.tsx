@@ -26,13 +26,10 @@ const Header = ({ titlePre = '' }) => {
         <title>{titlePre ? `${titlePre} |` : ''} Clog Criativo</title>
         <meta
           name="description"
-          content="An example Next.js site using Notion for the blog"
+          content="CLOG: O blog do criativo. Ideias, notícias, reflexões e soluções para quem quer crescer no marketing digital. By Cria.Joy"
         />
         <meta name="og:title" content="Clog Criativo" />
-        <meta property="og:image" content={ogImageUrl} />
-        <meta name="twitter:site" content="@_ijjk" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content={ogImageUrl} />
+        <meta property="og:image" content="/clog criativo.png" />
       </Head>
       <ul>
         {navItems.map(({ label, page, link }) => (
