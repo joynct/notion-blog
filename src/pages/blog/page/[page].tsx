@@ -68,7 +68,7 @@ export async function getStaticProps({ preview, params }) {
       currentPage,
       totalPages: Math.ceil(allPosts.length / postsPerPage),
     },
-    revalidate: 10,
+    revalidate: 300,
   }
 }
 
