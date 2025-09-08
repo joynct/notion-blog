@@ -10,7 +10,7 @@
     "lint-staged": "lint-staged"
   },
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "pre-commit": "lint-staged",
   "dependencies": {
