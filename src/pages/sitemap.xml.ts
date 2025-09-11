@@ -20,12 +20,6 @@ function generateSitemap(posts) {
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  <url>
-    <loc>https://clogcriativo.vercel.app/</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
 `
 
   // URLs das publicações
@@ -65,6 +59,7 @@ function generateSitemap(posts) {
 export async function getServerSideProps({ res }) {
   try {
     const postsTable = await getBlogIndex()
+    console.log('Posts retornados para o sitemap:', postsTable)
     const sitemap = generateSitemap(postsTable)
 
     // Headers corrigidos para o Google Search Console
@@ -73,7 +68,6 @@ export async function getServerSideProps({ res }) {
       'Cache-Control',
       'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
     )
-    res.setHeader('X-Robots-Tag', 'noindex') // Evita indexação do próprio sitemap
 
     // Define status code explicitamente
     res.statusCode = 200
