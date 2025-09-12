@@ -59,19 +59,8 @@ function generateSitemap(posts) {
 export async function getServerSideProps({ res }) {
   try {
     const postsTable = await getBlogIndex()
-    console.log('Posts retornados para o sitemap:', postsTable)
     const sitemap = generateSitemap(postsTable)
-
-    // Headers corrigidos para o Google Search Console
     res.setHeader('Content-Type', 'application/xml; charset=utf-8')
-    res.setHeader(
-      'Cache-Control',
-      'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
-    )
-
-    // Define status code explicitamente
-    res.statusCode = 200
-
     res.write(sitemap)
     res.end()
   } catch (error) {
@@ -80,10 +69,9 @@ export async function getServerSideProps({ res }) {
     res.statusCode = 500
     res.end('Error generating sitemap')
   }
-
   return { props: {} }
 }
 
-//componente fantasma, o sitemap é gerado diretamente pelo getServerSideProps
+// Componente fantasma, o sitemap é gerado diretamente pelo getServerSideProps
 const Sitemap = () => null
 export default Sitemap

@@ -7,8 +7,7 @@ import { BLOG_INDEX_ID, BLOG_INDEX_CACHE } from './server-constants'
 
 export default async function getBlogIndex(previews = true) {
   let postsTable: any = null
-  const useCache =
-    process.env.USE_CACHE === 'true' && process.env.NODE_ENV !== 'production'
+  const useCache = process.env.USE_CACHE === 'true'
   const cacheFile = `${BLOG_INDEX_CACHE}${previews ? '_previews' : ''}`
 
   // === CACHE INTELIGENTE ===
@@ -127,7 +126,7 @@ export default async function getBlogIndex(previews = true) {
     }
 
     //  Força busca dos previews mesmo com cache válido
-    const postsKeys = Object.keys(postsTable).splice(0, 10)
+    const postsKeys = Object.keys(postsTable) // carrega todos os posts
 
     const sema = new Sema(1, { capacity: postsKeys.length })
 
@@ -144,8 +143,8 @@ export default async function getBlogIndex(previews = true) {
           .map(async (postKey) => {
             await sema.acquire()
 
-            // Adiciona delay entre requisições
-            await new Promise((resolve) => setTimeout(resolve, 200))
+            // Adiciona delay entre requisições (aumentado para 500ms)
+            await new Promise((resolve) => setTimeout(resolve, 500))
 
             try {
               const post = postsTable[postKey]
