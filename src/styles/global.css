@@ -374,3 +374,294 @@ footer span:nth-child(3) {
 footer span:nth-child(3) a {
   color: inherit;
 }
+
+/* ---- Adições da versão 2: conteúdo vindo do Notion ---- */
+main {
+  min-height: 60vh;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.authors,
+.posted {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+article li {
+  color: #555;
+  font-size: 0.94rem;
+  line-height: 1.7;
+  margin: 0.25rem 0;
+}
+
+article h2 {
+  color: var(--fg);
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+article h3 {
+  font-size: 1.15rem;
+}
+
+article h4 {
+  font-size: 1rem;
+  margin: 2rem 0 1rem;
+}
+
+article blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  border-left: 3px solid #e23466;
+}
+
+article blockquote p {
+  margin: 0.25rem 0;
+}
+
+article figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+article figure img,
+article figure video {
+  margin: 0 auto !important;
+}
+
+figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.code-block {
+  text-align: left !important;
+}
+
+.code-block pre {
+  background: #f6f6f6;
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.8rem;
+}
+
+.code-block code {
+  background: none;
+  padding: 0;
+}
+
+.spacer {
+  height: 0.75rem;
+}
+
+.indent {
+  padding-left: 1.5rem;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.todo {
+  font-size: 0.94rem;
+  color: #555;
+  margin: 0.3rem 0;
+}
+
+.todo-done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+details {
+  margin: 0.75rem 0;
+  color: #555;
+}
+
+details summary {
+  cursor: pointer;
+  font-size: 0.94rem;
+}
+
+details summary h2,
+details summary h3,
+details summary h4 {
+  display: inline;
+}
+
+.callout {
+  display: flex;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 6px;
+  background: rgba(235, 236, 237, 0.6);
+  margin: 1.5rem 0;
+}
+
+.callout-icon {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+.callout .text p:first-child {
+  margin-top: 0;
+}
+
+.callout .text p:last-child {
+  margin-bottom: 0;
+}
+
+.columns {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.column {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 600px) {
+  .columns {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.table-wrapper table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.8rem;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.table-wrapper th {
+  background: #f6f6f6;
+}
+
+.bookmark {
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin: 1rem 0;
+  background: var(--bg);
+  color: inherit;
+}
+
+.bookmark:hover {
+  border-color: #e23466;
+}
+
+.bookmark-title {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.bookmark-url {
+  display: block;
+  font-size: 0.7rem;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.embed-video {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+}
+
+.embed-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 6px;
+}
+
+.equation {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.toc {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin: 1.5rem 0;
+}
+
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc li {
+  font-size: 0.8rem;
+}
+
+.toc .toc-heading_2 {
+  padding-left: 1rem;
+}
+
+.toc .toc-heading_3 {
+  padding-left: 2rem;
+}
+
+.twitter-tweet {
+  margin: 2rem auto;
+}
+
+/* Cores do Notion */
+.notion-gray { color: #787774; }
+.notion-brown { color: #9f6b53; }
+.notion-orange { color: #d9730d; }
+.notion-yellow { color: #cb912f; }
+.notion-green { color: #448361; }
+.notion-blue { color: #337ea9; }
+.notion-purple { color: #9065b0; }
+.notion-pink { color: #c14c8a; }
+.notion-red { color: #d44c47; }
+.notion-gray-background { background: #f1f1ef; }
+.notion-brown-background { background: #f4eeee; }
+.notion-orange-background { background: #fbecdd; }
+.notion-yellow-background { background: #fbf3db; }
+.notion-green-background { background: #edf3ec; }
+.notion-blue-background { background: #e7f3f8; }
+.notion-purple-background { background: rgba(244, 240, 247, 0.8); }
+.notion-pink-background { background: rgba(249, 238, 243, 0.8); }
+.notion-red-background { background: #fdebec; }

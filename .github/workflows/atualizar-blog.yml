@@ -1,0 +1,31 @@
+# Atualiza o blog automaticamente (puxa os posts novos do Notion).
+#
+# Como funciona: pede para a Vercel fazer um novo deploy usando um "Deploy Hook".
+# Configuração (uma vez só):
+#   1. Vercel → seu projeto → Settings → Git → Deploy Hooks → crie um hook (branch main) e copie a URL.
+#   2. GitHub → seu repositório → Settings → Secrets and variables → Actions → New repository secret
+#      Nome: VERCEL_DEPLOY_HOOK   Valor: a URL copiada.
+#
+# Também dá para rodar na hora: GitHub → aba Actions → "Atualizar blog" → Run workflow.
+
+name: Atualizar blog
+
+on:
+  schedule:
+    # Todos os dias às 06:00 e 18:00 (horário de Brasília). O cron do GitHub usa UTC.
+    - cron: '0 9,21 * * *'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar novo deploy na Vercel
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "Secret VERCEL_DEPLOY_HOOK não configurado. Veja as instruções no topo deste arquivo."
+            exit 1
+          fi
+          curl -fsS -X POST "$HOOK"

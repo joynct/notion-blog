@@ -1,85 +1,138 @@
-# Notion Blog
+# Clog Criativo v2: blog com Notion como CMS
 
-This is an example Next.js project that shows Next.js' upcoming SSG (static-site generation) support using Notion's **private** API for a backend.
+O Notion continua sendo onde você escreve e controla as publicações. A diferença é **como** o site lê o Notion:
 
-**Note**: This example uses the experimental SSG hooks only available in the Next.js canary branch! The APIs used within this example will change over time. Since it is using a private API and experimental features, use at your own risk as these things could change at any moment.
+| Antes (v1) | Agora (v2) |
+|---|---|
+| API não oficial do Notion, com o cookie `token_v2` da sua conta (expira e quebra sem aviso) | API oficial do Notion, com uma integração (estável) |
+| Páginas geradas na hora da visita (ISR + `fallback`): o 1º visitante, e o Google, viam "Loading..." ou uma versão antiga | **Todas** as páginas são geradas no build como HTML pronto. O Google lê o conteúdo completo |
+| Sitemap consultava o Notion a cada acesso e estourava o tempo limite da Vercel | `sitemap.xml` é um arquivo estático gerado no build |
+| Imagens com links do Notion, que expiram em ~1h | Imagens baixadas e servidas pelo próprio site |
+| Post inexistente respondia "200 OK" | 404 de verdade |
+| `lang="en"`, mesma descrição em todas as páginas | `pt-BR`, título/descrição/imagem por post, URL canônica, dados estruturados (JSON-LD) |
+| Next 11 | Next 15 |
 
-**Live Example hosted on Vercel**: https://notion-blog.vercel.app/
+## Como funciona
 
-## Getting Started
+```
+Notion ──(npm run build)──► scripts/sync-notion.mjs ──► content/*.json + public/notion-assets/
+                                                     └► sitemap.xml, rss.xml, robots.txt, search-index.json
+                                    next build ──► HTML estático de todas as páginas
+```
 
-To view the steps to setup Notion to work with this example view the post at https://notion-blog.vercel.app/blog/my-first-post or follow the steps below.
+Publicou ou editou um post no Notion? O site atualiza no próximo build: automático 2x por dia, ou na hora pelo botão (veja o passo 5).
 
-## Deploy Your Own
+Se o Notion estiver fora do ar ou algo der errado na sincronização, o build falha **de propósito**. A Vercel então mantém a última versão boa no ar, em vez de publicar um blog vazio.
 
-Deploy your own Notion blog with Vercel.
+---
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/ijjk/notion-blog/tree/main&project-name=notion-blog&repository-name=notion-blog)
+## Configuração (uma vez só)
 
-or
+### 1. Criar a integração no Notion
 
-1. Clone this repo `git clone https://github.com/ijjk/notion-blog.git`
-2. Configure project with [`vc`](https://vercel.com/download)
-3. Add your `NOTION_TOKEN` and `BLOG_INDEX_ID` as environment variables in [your project](https://vercel.com/docs/integrations?query=envir#project-level-apis/project-based-environment-variables). See [here](#getting-blog-index-and-token) for how to find these values
-4. Do final deployment with `vc`
+1. Acesse https://www.notion.so/profile/integrations → **Nova integração**.
+2. Tipo **Interna**, escolha o workspace do blog e salve.
+3. Em **Capacidades**, deixe marcado "Ler conteúdo". Em "Informações do usuário", marque **"Ler informações do usuário, incluindo e-mail"** para o nome do autor aparecer.
+4. Copie o **Token de integração interna** (começa com `ntn_`). Esse é o seu `NOTION_TOKEN`.
 
-Note: if redeploying with `vc` locally and you haven't made any changes to the application's source and only edited in Notion you will need use `vc -f` to bypass build de-duping
+> ⚠️ O `NOTION_TOKEN` antigo (o `token_v2`) **não funciona** aqui. Se ele ainda estiver em algum lugar, apague: ele dá acesso total à sua conta do Notion. Por segurança, saia e entre de novo no Notion para invalidá-lo.
 
-## Creating Your Pages Table
+### 2. Dar acesso ao banco de dados
 
-**Note**: this is auto run if a table isn't detected the first time visiting `/blog`
+No Notion, abra o banco de dados dos posts → **•••** (canto superior direito) → **Conexões** → adicione a integração que você criou.
 
-### Using the Pre-Configured Script
+### 3. Pegar o ID do banco de dados
 
-1. Create a blank page in Notion
-2. Clone this repo `git clone https://github.com/ijjk/notion-blog.git`
-3. Install dependencies `cd notion-blog && yarn`
-4. Run script to create table `NOTION_TOKEN='token' BLOG_INDEX_ID='new-page-id' node scripts/create-table.js` See [here](#getting-blog-index-and-token) for finding the id for the new page
+Abra o banco de dados como página inteira. A URL fica assim:
 
-### Manually Creating the Table
+```
+https://www.notion.so/seu-workspace/2068f0xxxxxxxxxxxxxxxxxxxxxxxxxx?v=...
+                                    └──────────── ID (32 caracteres) ──┘
+```
 
-1. Create a blank page in Notion
-2. Create a **inline** table on that page, don't use a full page table as it requires querying differently
-3. Add the below fields to the table
+Esse é o `NOTION_DATABASE_ID`. O `BLOG_INDEX_ID` do blog antigo também funciona: se ele for de uma página que contém o banco de dados, o script encontra o banco sozinho.
 
-The table should have the following properties:
+### 4. Colunas do banco de dados
 
-- `Page`: this the blog post's page
-- `Slug`: this is the blog post's slug relative to `/blog`, it should be a text property
-- `Published`: this filters blog posts in **production**, it should be a checkbox property
-- `Date`: this is when the blog post appears as posted, it should be a date property
-- `Authors`: this is a list of Notion users that wrote the post, it should be a person property
+O script aceita os nomes do blog antigo e os equivalentes em português (maiúsculas não importam):
 
-![Example Blog Posts Table](./assets/table-view.png)
+| Coluna | Tipo no Notion | Obrigatória? | Nomes aceitos |
+|---|---|---|---|
+| Título | Título | sim | qualquer nome |
+| Publicação | Checkbox, ou Select/Status com "Yes"/"Sim"/"Publicado" | sim | `Published`, `Publicado`, `Status` |
+| Slug | Texto | não (usa o título) | `Slug`, `URL` |
+| Data | Data | não (usa a data de criação) | `Date`, `Data` |
+| Autores | Pessoa | não | `Authors`, `Autor`, `Autores` |
+| Categorias | Multi-select ou Select | não | `Category`, `Categoria`, `Categorias`, `Tags` |
+| Descrição | Texto | não* | `Description`, `Descrição`, `Resumo` |
+| Capa | Arquivos | não** | `Cover`, `Capa`, `Imagem` |
 
-## Getting Blog Index and Token
+\* Sem descrição, o resumo vem do texto antes do primeiro **divisor** do post (como no blog antigo) ou do primeiro parágrafo. Vale preencher: é o texto que aparece no Google e no WhatsApp.
+\** Sem capa, usa a capa da página do Notion ou a primeira imagem do post.
 
-To get your blog index value, open Notion and Navigate to the Notion page with the table you created above. While on this page you should be able to get the page id from either:
+Para mudar os nomes aceitos, edite `PROPS` no topo de `scripts/sync-notion.mjs`.
 
-- the URL, if the URL of your page is https://www.notion.so/Blog-S5qv1QbUzM1wxm3H3SZRQkupi7XjXTul then your `BLOG_INDEX_ID` is `S5qv1QbU-zM1w-xm3H-3SZR-Qkupi7XjXTul`
-- the `loadPageChunk` request, if you open your developer console and go to the network tab then reload the page you should see a request for `loadPageChunk` and in the request payload you should see a `pageId` and that is your `BLOG_INDEX_ID`
+### 5. Vercel
 
-To get your Notion token, open Notion and look for the `token_v2` cookie.
+1. Suba esta pasta para o GitHub. Pode ser o mesmo repositório `joynct/notion-blog`, substituindo o conteúdo, ou um novo.
+2. Na Vercel → projeto → **Settings → Environment Variables**, cadastre:
+   - `NOTION_TOKEN` = token do passo 1
+   - `NOTION_DATABASE_ID` = ID do passo 3
+   - `SITE_URL` = `https://clogcriativo.vercel.app` (ou seu domínio, quando tiver)
+   - Remova o `NOTION_TOKEN` antigo, o `BLOG_INDEX_ID` e o `USE_CACHE`, se ainda estiverem lá.
+3. **Settings → General → Node.js Version**: 22.x.
+4. Faça um deploy.
 
-## Creating Blog Posts
+**Atualização automática:**
 
-1. In Notion click new on the table to add a new row
-2. Fill in the Page name, slug, Date, and Authors
-3. At the top of the content area add the content you want to show as a preview (keep this under 2 paragraphs)
-4. Add a divider block under your preview content
-5. Add the rest of your content under the divider block
+1. Vercel → **Settings → Git → Deploy Hooks** → crie um hook para a branch `main` e copie a URL.
+2. GitHub → repositório → **Settings → Secrets and variables → Actions** → novo secret `VERCEL_DEPLOY_HOOK` com essa URL.
 
-## Running Locally
+Pronto. O blog atualiza sozinho às 6h e às 18h. Para atualizar na hora: GitHub → aba **Actions** → "Atualizar blog" → **Run workflow**. Para mudar os horários, edite `.github/workflows/atualizar-blog.yml`.
 
-To run the project locally you need to follow steps 1 and 2 of [deploying](#deploy-your-own) and then follow the below steps
+> Dica: no Notion, dá para criar um **botão** com a ação "Enviar webhook" apontando para a URL do Deploy Hook (disponível nos planos pagos do Notion). Assim você publica direto de lá.
 
-1. Install dependencies `yarn`
-2. Expose `NOTION_TOKEN` and `BLOG_INDEX_ID` in your environment `export NOTION_TOKEN='<your-token>'`and `export BLOG_INDEX_ID='<your-blog-index-id>'` or `set NOTION_TOKEN="<your-token>" && set BLOG_INDEX_ID="<your-blog-index-id>"` for Windows
-3. Run next in development mode `yarn dev`
-4. Build and run in production mode `yarn build && yarn start`
+### 6. Google Search Console
 
-## Credits
+1. Em https://search.google.com/search-console, use a propriedade que você já tem. O arquivo de verificação `google150bc454607f80b9.html` continua no site.
+2. **Sitemaps** → envie `sitemap.xml`.
+3. Para acelerar um post novo: **Inspeção de URL** → cole o link do post → **Solicitar indexação**.
 
-- Guillermo Rauch [@rauchg](https://twitter.com/rauchg) for the initial idea
-- Shu Ding [@shuding\_](https://twitter.com/shuding_) for the design help
-- Luis Alvarez [@luis_fades](https://twitter.com/luis_fades) for design help and bug catching
+A indexação de um site novo leva de alguns dias a algumas semanas. Isso é normal.
+
+---
+
+## Rodar no computador
+
+```bash
+npm install
+copy .env.example .env.local   # no Windows (no Mac/Linux: cp)
+# preencha o .env.local com NOTION_TOKEN e NOTION_DATABASE_ID
+npm run sync     # baixa os posts do Notion
+npm run dev      # abre em http://localhost:3000
+```
+
+Rode `npm run sync` de novo sempre que quiser ver mudanças feitas no Notion. Para testar a versão final: `npm run build` e depois `npm start`.
+
+## Onde mudar o quê
+
+| Quero mudar... | Arquivo |
+|---|---|
+| Nome do site, descrição, URL, redes sociais, Google Analytics, posts por página | `site.config.js` |
+| Texto da home | `src/pages/index.tsx` |
+| Menu | `src/components/Header.tsx` |
+| Visual | `src/styles/*.css` |
+| Como cada tipo de bloco do Notion aparece | `src/components/NotionRenderer.tsx` |
+
+## Blocos do Notion suportados
+
+Parágrafo, títulos 1 a 3 (inclusive os recolhíveis), listas com marcadores e numeradas (com subníveis), to-do, citação, callout, toggle, código (com cores), equação, divisor, sumário, tabela, colunas, bloco sincronizado, imagem, vídeo (YouTube, Vimeo ou arquivo), áudio, arquivo/PDF, bookmark e embed (YouTube, Vimeo, Spotify, Loom, Google Maps, Canva, tweets). Texto em negrito, itálico, sublinhado, riscado, código, cores, links e equações inline.
+
+Blocos não suportados são ignorados, e o build mostra um aviso com o nome do post.
+
+## Endereços
+
+- `/blog`: lista de posts (página 1); `/blog/page/2`, `/blog/page/3`...
+- `/blog/<slug>`: post
+- `/categoria/<categoria>`: posts da categoria. O nome vira endereço sem acentos: "Marketing Digital" → `/categoria/marketing-digital`
+- `/sitemap.xml`, `/rss.xml`, `/robots.txt`

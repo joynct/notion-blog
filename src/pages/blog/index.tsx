@@ -1,14 +1,10 @@
-import { GetServerSideProps } from 'next'
+import BlogIndexPage, { BlogIndexProps } from '../../components/BlogIndexPage'
+import { getBlogPage } from '../../lib/pagination'
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    redirect: {
-      destination: '/blog/page/1',
-      permanent: false,
-    },
-  }
+export async function getStaticProps() {
+  return { props: getBlogPage(1) }
 }
 
-const BlogIndexRedirect = () => null
-
-export default BlogIndexRedirect
+export default function Blog(props: BlogIndexProps) {
+  return <BlogIndexPage {...props} />
+}

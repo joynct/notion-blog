@@ -260,3 +260,125 @@
   display: inline-block; /* Para que o fundo se ajuste ao tamanho do texto */
   margin-top: 8px; /* Espaço acima do texto */
 }
+
+/* ---- Adições da versão 2 ---- */
+.previewTitle {
+  margin: 1.5rem 0 0.25rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--fg);
+  letter-spacing: -0.01rem;
+  text-align: left !important;
+}
+
+.previewTitle a {
+  color: var(--fg);
+}
+
+.previewTitle a:hover {
+  color: #e23466;
+}
+
+.postPreview {
+  text-align: left;
+}
+
+.readMore {
+  margin-top: 0;
+  font-size: 0.85rem;
+}
+
+.sectionTitle {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.seeAll {
+  text-align: center;
+  margin: 2rem 0 3rem;
+}
+
+.categoryNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+
+.categoryNav a,
+.categoryList a {
+  background-color: #eee;
+  color: #333;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.categoryNav a:hover,
+.categoryList a:hover {
+  background-color: #e23466;
+  color: #fff;
+}
+
+.categoryList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.categoryList .category {
+  margin-top: 0;
+}
+
+.categoryCount {
+  text-align: center;
+  margin-top: -30px;
+  margin-bottom: 2rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 600px;
+  margin: 2rem auto 3rem;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.share {
+  margin: 1rem 0 1.5rem;
+  min-height: 32px;
+}
+
+.postBody {
+  overflow-wrap: break-word;
+}
+
+.postNav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.postNav a {
+  display: flex;
+  flex-direction: column;
+  max-width: 48%;
+  font-size: 0.85rem;
+}
+
+.postNav small {
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.postNav .postNavNext {
+  text-align: right;
+  margin-left: auto;
+}

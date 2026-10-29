@@ -1,28 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "ES2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
-    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true,
-    "typeRoots": ["./types", "./node_modules/@types"]
+    "incremental": true
   },
-  "exclude": ["node_modules"],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "types/**/*.d.ts",
-    "scripts/create-table.js",
-    "src/pages/_app.js"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "site.config.js"],
+  "exclude": ["node_modules"]
 }

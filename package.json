@@ -1,34 +1,28 @@
 {
-  "name": "notion-blog",
-  "version": "0.1.0",
-  "scripts": {
-    "dev": "set NODE_OPTIONS=--openssl-legacy-provider && next dev",
-    "start": "next start",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider && next build && node .next/server/build-rss.js",
-    "create-table": "node lib/notion/create-table.js",
-    "format": "prettier --write \"**/*.{js,jsx,json,ts,tsx,md,mdx,css,html,yml,yaml,scss,sass}\" --ignore-path .gitignore",
-    "lint-staged": "lint-staged"
+  "name": "clog-criativo",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Blog Clog Criativo: Notion como CMS, site 100% estático para o Google indexar.",
+  "engines": {
+    "node": ">=20"
   },
-  "pre-commit": "lint-staged",
+  "scripts": {
+    "sync": "node scripts/sync-notion.mjs",
+    "dev": "next dev",
+    "build": "node scripts/sync-notion.mjs && next build",
+    "start": "next start"
+  },
   "dependencies": {
-    "@zeit/react-jsx-parser": "2.0.0",
-    "async-sema": "3.1.0",
-    "caniuse-lite": "^1.0.30001720",
-    "github-slugger": "1.2.1",
-    "katex": "0.12.0",
-    "next": "^11.1.2",
-    "prismjs": "1.17.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "uuid": "8.1.0"
+    "katex": "0.16.11",
+    "next": "15.5.28",
+    "prismjs": "1.30.0",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
   },
   "devDependencies": {
-    "@types/katex": "0.11.0",
-    "@types/node": "14.14.31",
-    "@types/react": "17.0.2",
-    "lint-staged": "10.5.4",
-    "pre-commit": "1.2.2",
-    "prettier": "2.2.1",
-    "typescript": "^4.4.4"
+    "@types/node": "20.17.10",
+    "@types/prismjs": "1.26.5",
+    "@types/react": "19.1.12",
+    "typescript": "5.6.3"
   }
 }

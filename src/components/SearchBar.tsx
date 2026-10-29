@@ -1,127 +1,95 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { getBlogLink } from '../lib/blog-helpers'
 import searchStyles from '../styles/search.module.css'
+import { formatDate } from '../lib/format'
 
-interface Post {
-  Slug: string
-  Page: string
-  Authors: string[]
-  Date: string
-  preview?: string
-}
+type Entry = { slug: string; title: string; date: string; authors: string[]; categories: string[]; text: string }
 
-interface SearchBarProps {
-  posts: Post[]
-}
+const normalize = (s: string) =>
+  s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
 
-const SearchBar: React.FC<SearchBarProps> = ({ posts }) => {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([])
-  const [showResults, setShowResults] = useState(false)
+// Busca em TODOS os posts (não só os da página atual). O índice é um arquivo
+// estático gerado no build e só é baixado quando a pessoa clica na busca.
+export default function SearchBar() {
+  const [term, setTerm] = useState('')
+  const [index, setIndex] = useState<Entry[] | null>(null)
+  const loading = useRef(false)
+
+  const load = () => {
+    if (index || loading.current) return
+    loading.current = true
+    fetch('/search-index.json')
+      .then((r) => r.json())
+      .then(setIndex)
+      .catch(() => setIndex([]))
+  }
 
   useEffect(() => {
-    if (searchTerm.length > 2) {
-      const filtered = posts.filter((post) => {
-        // Buscar no título
-        const titleMatch = post.Page.toLowerCase().includes(
-          searchTerm.toLowerCase()
-        )
+    if (term.length > 0) load()
+  }, [term])
 
-        // Buscar nos autores
-        const authorMatch = post.Authors.some((author) =>
-          author.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-
-        // Buscar no preview (primeiros parágrafos do post)
-        let previewMatch = false
-        if (post.preview && Array.isArray(post.preview)) {
-          const previewText = post.preview
-            .map((block) => {
-              // Extrair texto do bloco do Notion
-              if (
-                block.value &&
-                block.value.properties &&
-                block.value.properties.title
-              ) {
-                return block.value.properties.title
-                  .map((item) => item[0])
-                  .join(' ')
-              }
-              return ''
-            })
-            .join(' ')
-
-          previewMatch = previewText
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase())
-        }
-
-        return titleMatch || authorMatch || previewMatch
+  const results = useMemo(() => {
+    if (!index || term.trim().length < 3) return []
+    const words = normalize(term).split(/\s+/).filter(Boolean)
+    return index
+      .map((p) => {
+        const title = normalize(p.title)
+        const body = normalize(`${p.authors.join(' ')} ${p.categories.join(' ')} ${p.text}`)
+        if (!words.every((w) => title.includes(w) || body.includes(w))) return null
+        const score = words.reduce((s, w) => s + (title.includes(w) ? 3 : 1), 0)
+        return { p, score }
       })
+      .filter(Boolean)
+      .sort((a, b) => b!.score - a!.score)
+      .map((r) => r!.p)
+  }, [index, term])
 
-      setFilteredPosts(filtered)
-      setShowResults(true)
-    } else {
-      setFilteredPosts([])
-      setShowResults(false)
-    }
-  }, [searchTerm, posts])
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value)
-  }
-
-  const clearSearch = () => {
-    setSearchTerm('')
-    setShowResults(false)
-  }
+  const show = term.trim().length >= 3
 
   return (
-    <div className={searchStyles.searchContainer}>
+    <div className={searchStyles.searchContainer} role="search">
       <div className={searchStyles.searchInputWrapper}>
         <input
-          type="text"
+          type="search"
           placeholder="Pesquisar posts..."
-          value={searchTerm}
-          onChange={handleInputChange}
+          aria-label="Pesquisar posts"
+          value={term}
+          onFocus={load}
+          onChange={(e) => setTerm(e.target.value)}
           className={searchStyles.searchInput}
         />
-        {searchTerm && (
-          <button onClick={clearSearch} className={searchStyles.clearButton}>
+        {term && (
+          <button type="button" aria-label="Limpar busca" onClick={() => setTerm('')} className={searchStyles.clearButton}>
             ✕
           </button>
         )}
       </div>
 
-      {showResults && (
+      {show && (
         <div className={searchStyles.searchResults}>
-          {filteredPosts.length > 0 ? (
+          {index === null ? (
+            <div className={searchStyles.noResults}>Carregando…</div>
+          ) : results.length > 0 ? (
             <>
-              <div className={searchStyles.resultsHeader}>
-                {filteredPosts.length} resultado(s) encontrado(s)
-              </div>
-              {filteredPosts.map((post) => (
-                <Link key={post.Slug} href={getBlogLink(post.Slug)}>
-                  <a className={searchStyles.resultItem} onClick={clearSearch}>
-                    <div className={searchStyles.resultTitle}>{post.Page}</div>
-                    <div className={searchStyles.resultMeta}>
-                      Por {post.Authors.join(', ')} •{' '}
-                      {new Date(post.Date).toLocaleDateString('pt-BR')}
-                    </div>
-                  </a>
+              <div className={searchStyles.resultsHeader}>{results.length} resultado(s) encontrado(s)</div>
+              {results.map((post) => (
+                <Link key={post.slug} href={`/blog/${post.slug}`} className={searchStyles.resultItem} onClick={() => setTerm('')}>
+                  <div className={searchStyles.resultTitle}>{post.title}</div>
+                  <div className={searchStyles.resultMeta}>
+                    {post.authors.length > 0 && <>Por {post.authors.join(', ')} • </>}
+                    {formatDate(post.date)}
+                  </div>
                 </Link>
               ))}
             </>
           ) : (
-            <div className={searchStyles.noResults}>
-              Nenhum post encontrado para "{searchTerm}"
-            </div>
+            <div className={searchStyles.noResults}>Nenhum post encontrado para &quot;{term}&quot;</div>
           )}
         </div>
       )}
     </div>
   )
 }
-
-export default SearchBar
