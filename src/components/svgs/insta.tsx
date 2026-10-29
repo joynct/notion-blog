@@ -3,7 +3,7 @@ import React from 'react'
 const Insta = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 640 640"
+    viewBox="96 96 448 448"
     width="48"
     height="48"
     {...props}

@@ -88,7 +88,7 @@ Para mudar os nomes aceitos, edite `PROPS` no topo de `scripts/sync-notion.mjs`.
 1. Vercel → **Settings → Git → Deploy Hooks** → crie um hook para a branch `main` e copie a URL.
 2. GitHub → repositório → **Settings → Secrets and variables → Actions** → novo secret `VERCEL_DEPLOY_HOOK` com essa URL.
 
-Pronto. O blog atualiza sozinho às 6h e às 18h. Para atualizar na hora: GitHub → aba **Actions** → "Atualizar blog" → **Run workflow**. Para mudar os horários, edite `.github/workflows/atualizar-blog.yml`.
+Pronto. O blog atualiza sozinho todo dia às 18h. Para atualizar na hora: GitHub → aba **Actions** → "Atualizar blog" → **Run workflow**. Para mudar o horário, edite o `cron` em `.github/workflows/atualizar-blog.yml`.
 
 > Dica: no Notion, dá para criar um **botão** com a ação "Enviar webhook" apontando para a URL do Deploy Hook (disponível nos planos pagos do Notion). Assim você publica direto de lá.
 

@@ -30,6 +30,6 @@ module.exports = {
     instagram: 'https://instagram.com/cria.joy',
     linkedin: 'https://www.linkedin.com/in/criajoy/',
     email: 'joyceaniceto@gmail.com',
-    criajoy: 'https://criajoy.netlify.app/',
+    criajoy: 'https://criajoy.com.br/',
   },
 }

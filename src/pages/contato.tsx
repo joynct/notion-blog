@@ -25,7 +25,11 @@ export default function Contact() {
 
         <div className={contactStyles.name}>
           Joyce Aniceto @
-          <a href={site.social.criajoy} target="_blank" rel="noopener">
+          <a
+            href={`${site.social.criajoy}?utm_source=clogblog&utm_medium=contato&utm_campaign=blog`}
+            target="_blank"
+            rel="noopener"
+          >
             Cria.Joy
           </a>
         </div>

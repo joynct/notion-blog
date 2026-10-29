@@ -17,10 +17,11 @@
 }
 
 .links a svg {
+  display: block;
   width: 100%;
   height: 100%;
-  max-width: 48px;
-  max-height: 48px;
+  max-width: 40px;
+  max-height: 40px;
 }
 
 .links a:hover {
