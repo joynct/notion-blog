@@ -12,8 +12,8 @@ name: Atualizar blog
 
 on:
   schedule:
-    # Todos os dias às 06:00 e 18:00 (horário de Brasília). O cron do GitHub usa UTC.
-    - cron: '0 9,21 * * *'
+    # Todos os dias às 18:00 (horário de Brasília). O cron do GitHub usa UTC.
+    - cron: '0 21 * * *'
   workflow_dispatch:
 
 jobs:
