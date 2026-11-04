@@ -382,3 +382,60 @@
   text-align: right;
   margin-left: auto;
 }
+
+/* ---- Bloco de contato no fim dos posts ---- */
+.contactBlock {
+  margin: 2.5rem 0 1rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e5e5;
+  border-radius: var(--radius);
+  background: #fafafa;
+}
+
+.contactTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.contactText {
+  margin: 0 0 1rem;
+}
+
+.contactActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.contactButton,
+.contactButtonAlt {
+  display: inline-block;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid #000;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contactButton {
+  background: #000;
+  color: #fff;
+}
+
+.contactButton:hover {
+  background: #e23466;
+  border-color: #e23466;
+  color: #fff;
+}
+
+.contactButtonAlt {
+  background: transparent;
+  color: #000;
+}
+
+.contactButtonAlt:hover {
+  background: #000;
+  color: #fff;
+}

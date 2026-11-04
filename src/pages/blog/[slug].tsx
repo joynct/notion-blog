@@ -4,6 +4,7 @@ import Script from 'next/script'
 import { useEffect } from 'react'
 import Seo from '../../components/Seo'
 import NotionBlocks from '../../components/NotionRenderer'
+import ContactBlock from '../../components/ContactBlock'
 import blogStyles from '../../styles/blog.module.css'
 import { getAllPosts, getPost } from '../../lib/content'
 import { prerenderBlocks } from '../../lib/prerender'
@@ -103,6 +104,8 @@ export default function PostPage({ post, newer, older, hasTweet }: Props) {
         <div className={blogStyles.postBody}>
           <NotionBlocks blocks={post.blocks} postTitle={post.title} />
         </div>
+
+        <ContactBlock title={post.title} />
 
         <hr />
         <ShareButtons title={post.title} url={url} />

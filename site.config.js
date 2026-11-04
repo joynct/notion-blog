@@ -31,5 +31,6 @@ module.exports = {
     linkedin: 'https://www.linkedin.com/in/criajoy/',
     email: 'joyceaniceto@gmail.com',
     criajoy: 'https://criajoy.com.br/',
+    whatsapp: '5564981614002', // só números, com 55 + DDD
   },
 }
