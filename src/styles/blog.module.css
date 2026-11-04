@@ -387,18 +387,22 @@
 .contactBlock {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin: 2.5rem 0 1rem;
-  padding: 1.5rem;
+  gap: 1rem;
+  margin: 2rem 0 0.5rem;
+  padding: 1rem 1.25rem;
   border: 1px solid #e5e5e5;
   border-radius: var(--radius);
   background: #fafafa;
 }
 
-.contactPhoto {
+/* o seletor duplo vence a regra ".post img" (margem de 2rem e sombra das imagens do post) */
+.contactBlock .contactPhoto {
   flex-shrink: 0;
+  display: block;
   width: 96px;
   height: 96px;
+  margin: 0;
+  box-shadow: none;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -408,18 +412,20 @@
 }
 
 .contactTitle {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.25rem;
 }
 
 .contactText {
-  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 0.75rem;
 }
 
 .contactButton {
   display: inline-block;
-  padding: 0.6rem 1.1rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius);
   border: 1px solid #000;
   background: #000;
@@ -439,5 +445,6 @@
   .contactBlock {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.75rem;
   }
 }
