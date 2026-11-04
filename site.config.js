@@ -15,7 +15,7 @@ module.exports = {
     'CLOG: o blog do criativo. Ideias, notícias, reflexões e soluções para quem quer crescer no marketing digital. By Cria.Joy',
   locale: 'pt_BR',
   lang: 'pt-BR',
-  defaultImage: '/og-image.png',
+  defaultImage: '/og-padrao.png',
   author: 'Joyce Aniceto',
   googleAnalyticsId: 'G-RRPGN34V24',
   postsPerPage: 10,
