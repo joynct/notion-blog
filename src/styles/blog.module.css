@@ -385,6 +385,9 @@
 
 /* ---- Bloco de contato no fim dos posts ---- */
 .contactBlock {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
   margin: 2.5rem 0 1rem;
   padding: 1.5rem;
   border: 1px solid #e5e5e5;
@@ -392,36 +395,38 @@
   background: #fafafa;
 }
 
+.contactPhoto {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.contactContent {
+  min-width: 0;
+}
+
 .contactTitle {
   font-size: 1.15rem;
   font-weight: 700;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.4rem;
 }
 
 .contactText {
   margin: 0 0 1rem;
 }
 
-.contactActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.contactButton,
-.contactButtonAlt {
+.contactButton {
   display: inline-block;
   padding: 0.6rem 1.1rem;
   border-radius: var(--radius);
   border: 1px solid #000;
+  background: #000;
+  color: #fff;
   font-size: 0.9rem;
   font-weight: 600;
   text-decoration: none;
-}
-
-.contactButton {
-  background: #000;
-  color: #fff;
 }
 
 .contactButton:hover {
@@ -430,12 +435,9 @@
   color: #fff;
 }
 
-.contactButtonAlt {
-  background: transparent;
-  color: #000;
-}
-
-.contactButtonAlt:hover {
-  background: #000;
-  color: #fff;
+@media (max-width: 560px) {
+  .contactBlock {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
