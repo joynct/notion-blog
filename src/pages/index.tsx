@@ -5,6 +5,7 @@ import sharedStyles from '../styles/shared.module.css'
 import blogStyles from '../styles/blog.module.css'
 import { getAllPosts } from '../lib/content'
 import type { PostMeta } from '../lib/types'
+import site from '../../site.config'
 
 export async function getStaticProps() {
   return { props: { latest: getAllPosts().slice(0, 3) } }
@@ -21,16 +22,18 @@ export default function Home({ latest }: { latest: PostMeta[] }) {
 
         <div className="explanation">
           <p>
-            Aqui, você encontra ideias, reflexões e soluções que unem criatividade e resultado. Para quem quer vender no
-            digital com mais clareza, consistência e personalidade, sem se perder no caos das redes sociais.
+            Hellooo, aqui é a Joy. O Clog Criativo é onde eu escrevo sobre novidades no marketing digital e meus aprendizados por esse caminho tortuoso.
+            Blog com C de Conhecimento, Criatividade e Cria.joy (minha marca!). Aqui você vai encontrar temas como redes sociais, site, SEO e design, entre ideias, reflexões e criatividade. 
           </p>
           <p>
-            É para ler com calma! Num mundo dominado pela instantaneidade, aqui é um espaço contra a maré. Nada de vídeos
-            chamativos, anúncios piscando ou click baits desnecessários. Esse espaço nasceu para que eu possa
-            compartilhar o que aprendo e aplico diariamente com marcas reais: estratégias que funcionam, design que vende
-            e marketing que respeita o tempo (e o bolso) de quem está do outro lado.
+            É para ler com calma! Num mundo dominado pela instantaneidade, esse é meu espaço contra a maré. Sabe aqueles sites repletos de anúncios, em que você mal
+            consegue ler a matéria? Pois é, aqui é o oposto disso. Nada de vídeos piscando, clickbaits desnecessários ou promessas milagrosas. É explicação e diferenciação, direto ao ponto.
           </p>
-          <p>Se você gostou, me siga nas minhas redes sociais e deixe seu feedback.</p>
+          <p>Se você gostou, me segue no{' '}
+            <a href={site.social.instagram} target="_blank" rel="noopener noreferrer">
+              instagram (@cria.joy)
+            </a>{' '}
+            e acompanhe o blog pelo <a href="/rss.xml">RSS</a>. Dúvidas, feedbacks e/ou questionamentos, na página de contato tem mais formas de falar comigo.</p>
         </div>
       </div>
 
