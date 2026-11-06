@@ -16,6 +16,7 @@ type Props = {
   post: Post
   newer: Pick<PostMeta, 'slug' | 'title'> | null
   older: Pick<PostMeta, 'slug' | 'title'> | null
+  related: Pick<PostMeta, 'slug' | 'title'>[]
   hasTweet: boolean
 }
 
@@ -43,17 +44,28 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   const idx = all.findIndex((p) => p.slug === slug)
   const pick = (p?: PostMeta) => (p ? { slug: p.slug, title: p.title } : null)
 
+  // "Leia também": até 3 posts, priorizando os que dividem categorias com este.
+  // Se faltar, completa com os mais recentes. Dá ao leitor (e ao Google) mais caminhos entre os posts.
+  const mine = new Set(post.categories.map((c) => c.slug))
+  const related = all
+    .filter((p) => p.slug !== slug)
+    .map((p, order) => ({ p, order, shared: p.categories.filter((c) => mine.has(c.slug)).length }))
+    .sort((a, b) => b.shared - a.shared || a.order - b.order)
+    .slice(0, 3)
+    .map(({ p }) => ({ slug: p.slug, title: p.title }))
+
   return {
     props: {
       post,
       newer: pick(all[idx - 1]),
       older: pick(all[idx + 1]),
+      related,
       hasTweet: hasTwitter(post.blocks),
     },
   }
 }
 
-export default function PostPage({ post, newer, older, hasTweet }: Props) {
+export default function PostPage({ post, newer, older, related, hasTweet }: Props) {
   const url = `${site.siteUrl}/blog/${post.slug}`
 
   // Ao navegar de um post para outro sem recarregar, reativa os botões de compartilhar e os tweets.
@@ -104,6 +116,19 @@ export default function PostPage({ post, newer, older, hasTweet }: Props) {
         <div className={blogStyles.postBody}>
           <NotionBlocks blocks={post.blocks} postTitle={post.title} />
         </div>
+
+        {related.length > 0 && (
+          <section className={blogStyles.related} aria-label="Leia também">
+            <h2 className={blogStyles.relatedTitle}>Leia também</h2>
+            <ul>
+              {related.map((r) => (
+                <li key={r.slug}>
+                  <Link href={`/blog/${r.slug}`}>{r.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <ContactBlock title={post.title} />
 
