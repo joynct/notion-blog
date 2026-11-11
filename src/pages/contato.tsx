@@ -4,18 +4,20 @@ import contactStyles from '../styles/contact.module.css'
 import Insta from '../components/svgs/insta'
 import Envelope from '../components/svgs/envelope'
 import LinkedIn from '../components/svgs/linkedin'
+import XIcon from '../components/svgs/x'
 import site from '../../site.config'
 
 const contacts = [
   { Comp: Insta, alt: 'Instagram', link: site.social.instagram },
   { Comp: LinkedIn, alt: 'LinkedIn', link: site.social.linkedin },
+  { Comp: XIcon, alt: 'X (Twitter)', link: site.social.twitter },
   { Comp: Envelope, alt: 'E-mail', link: `mailto:${site.social.email}` },
 ]
 
 export default function Contact() {
   return (
     <>
-      <Seo title="Contato" path="/contato" description="Fale com a Joyce Aniceto, da Cria.Joy: Instagram, LinkedIn e e-mail." />
+      <Seo title="Contato" path="/contato" description="Fale com a Joyce Aniceto, da Cria.Joy: Instagram, LinkedIn, X e e-mail." />
       <div className={sharedStyles.layout}>
         <div className={contactStyles.avatar}>
           <img src="/joy.png" alt="Logo Cria.Joy" height={120} />

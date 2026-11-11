@@ -29,6 +29,7 @@ module.exports = {
   social: {
     instagram: 'https://instagram.com/cria.joy',
     linkedin: 'https://www.linkedin.com/in/criajoy/',
+    twitter: 'https://x.com/clogcriativo',
     email: 'joyceaniceto@gmail.com',
     criajoy: 'https://criajoy.com.br/',
     whatsapp: '5564981614002', // só números, com 55 + DDD

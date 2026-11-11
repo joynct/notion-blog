@@ -74,6 +74,7 @@ export default function Seo({ title, description, path, image, type = 'website',
       {article?.tags?.map((t) => <meta key={t} property="article:tag" content={t} />)}
 
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@clogcriativo" />
       <meta name="twitter:title" content={title || site.name} />
       <meta name="twitter:description" content={desc} />
       <meta name="twitter:image" content={img} />
