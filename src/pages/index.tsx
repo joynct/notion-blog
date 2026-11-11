@@ -33,11 +33,11 @@ export default function Home({ latest }: { latest: PostMeta[] }) {
             <a href={site.social.instagram} target="_blank" rel="noopener noreferrer">
               instagram (@cria.joy)
             </a>{' '}
-            ou no{' '}
+            e acompanhe as publicações pelo{' '}
             <a href={site.social.twitter} target="_blank" rel="noopener noreferrer">
-              X (@clogcriativo)
+              twitter (X) (@clogcriativo)
             </a>{' '}
-            e acompanhe o blog pelo <a href="/rss.xml">RSS</a>. Dúvidas, feedbacks e/ou questionamentos, na página de contato tem mais formas de falar comigo.</p>
+            ou pelo <a href="/rss.xml">RSS</a>. Dúvidas, feedbacks e/ou questionamentos, na página de contato tem mais formas de falar comigo.</p>
         </div>
       </div>
 
